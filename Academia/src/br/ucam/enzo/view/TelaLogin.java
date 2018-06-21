@@ -70,9 +70,9 @@ public class TelaLogin {
 		JButton btnNewButton = new JButton("Logar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MenuPrincipal principal = new MenuPrincipal();
+				TelaMenuPrincipal principal = new TelaMenuPrincipal();
 				frmLogin.dispose();
-				principal.getFrmMenuPrincipal().setVisible(true);
+				principal.getFrmTelaMenuPrincipal().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(10, 109, 175, 23);

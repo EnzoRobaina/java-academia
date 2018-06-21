@@ -3,7 +3,7 @@ package br.ucam.enzo.model.bean;
 public class Aluno extends Pessoa {
 
 	private String modalidade;
-
+	
 	@Override
 	public int getId() {
 		// TODO Auto-generated method stub
