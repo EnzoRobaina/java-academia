@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import br.ucam.connection.ConnectionFactory;
-
+import br.ucam.enzo.connection.ConnectionFactory;
 import br.ucam.enzo.model.bean.Aluno;
+import br.ucam.enzo.model.bean.Modalidade;
 
 public class AlunoDAO {
 
@@ -128,41 +128,42 @@ public class AlunoDAO {
 		
 	}
 	
-public List<Aluno> buscaNome(String nome){
-		
-		PreparedStatement stmt = null;
-		Connection con = null;
-		ResultSet rs = null;
-		List<Aluno> alunos = new ArrayList<>();
-		
-		try {
-			ConnectionFactory.conectar();
-			stmt = ConnectionFactory.con.prepareStatement("select * from aluno where nome like ?");
-			//stmt.setInt(1, Integer.parseInt(nome));
-			stmt.setString(1, "%"+ nome + "%");
-			rs = stmt.executeQuery();
+	public List<Aluno> buscaNome(String nome){
 			
-			while(rs.next()) {
+			PreparedStatement stmt = null;
+			Connection con = null;
+			ResultSet rs = null;
+			List<Aluno> alunos = new ArrayList<>();
+			
+			try {
+				ConnectionFactory.conectar();
+				stmt = ConnectionFactory.con.prepareStatement("select * from aluno where nome like ?");
+				//stmt.setInt(1, Integer.parseInt(nome));
+				stmt.setString(1, "%"+ nome + "%");
+				rs = stmt.executeQuery();
 				
-				Aluno a = new Aluno();
-				a.setId(rs.getInt("id"));
-				a.setDataNasc(rs.getString("data_nasc"));
-				a.setModalidade(rs.getString("modalidade_fk"));
-				a.setNome(rs.getString("nome"));
+				while(rs.next()) {
+					
+					Aluno a = new Aluno();
+					a.setId(rs.getInt("id"));
+					a.setDataNasc(rs.getString("data_nasc"));
+					a.setModalidade(rs.getString("modalidade_fk"));
+					a.setNome(rs.getString("nome"));
+					
+					alunos.add(a);
+					
+					
+				}
 				
-				alunos.add(a);
-				
-				
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Erro ao consultar: "+e);
+			} finally {
+				ConnectionFactory.desconectar();
 			}
 			
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao consultar: "+e);
-		} finally {
-			ConnectionFactory.desconectar();
+			return alunos;
+			
 		}
-		
-		return alunos;
-		
-	}
+
 }
 

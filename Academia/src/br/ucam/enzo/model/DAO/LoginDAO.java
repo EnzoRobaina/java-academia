@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import br.ucam.connection.ConnectionFactory;
+import br.ucam.enzo.connection.ConnectionFactory;
 
 public class LoginDAO {
 	

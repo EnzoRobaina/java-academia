@@ -2,11 +2,20 @@ package br.ucam.enzo.model.bean;
 
 public class Modalidade {
 	
+	private int id;
+	
 	private String nome;
 	private String professor;
 	private String horario;
 	private double valor;
 	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getNome() {
 		return nome;
 	}

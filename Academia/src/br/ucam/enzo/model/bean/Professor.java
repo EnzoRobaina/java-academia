@@ -3,7 +3,7 @@ package br.ucam.enzo.model.bean;
 public class Professor extends Pessoa {
 	
 	private double salario;
-	private String modalidade;
+	
 	
 	@Override
 	public int getId() {
@@ -42,12 +42,7 @@ public class Professor extends Pessoa {
 	public void setSalario(double salario) {
 		this.salario = salario;
 	}
-	public String getModalidade() {
-		return modalidade;
-	}
-	public void setModalidade(String modalidade) {
-		this.modalidade = modalidade;
-	}
+	
 	
 	
 
