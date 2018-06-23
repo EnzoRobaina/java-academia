@@ -1,28 +1,47 @@
 package br.ucam.enzo.view;
 
 import java.awt.EventQueue;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
+import br.ucam.enzo.connection.ConnectionFactory;
+import br.ucam.enzo.model.DAO.AlunoDAO;
 import br.ucam.enzo.model.DAO.ProfessorDAO;
+import br.ucam.enzo.model.bean.Aluno;
 import br.ucam.enzo.model.bean.Professor;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
+import javax.swing.JFormattedTextField;
 
 public class TelaCadastroProfessor {
 
 	private JFrame frmCadastroDeProfessor;
-	private JTextField nomeTxt;
-	private JTextField dataNascTxt;
-	private JTextField salarioTxt;
-
+	
 	public JFrame getFrmCadastroDeProfessor() {
 		return frmCadastroDeProfessor;
 	}
+
+	private JTextField nomeTxt;
+	private JTextField salarioTxt;
 
 	/**
 	 * Launch the application.
@@ -52,57 +71,74 @@ public class TelaCadastroProfessor {
 	 */
 	private void initialize() {
 		frmCadastroDeProfessor = new JFrame();
-		frmCadastroDeProfessor.setResizable(false);
 		frmCadastroDeProfessor.setTitle("Cadastro de professor");
-		frmCadastroDeProfessor.setBounds(100, 100, 450, 241);
-		frmCadastroDeProfessor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmCadastroDeProfessor.setResizable(false);
+		frmCadastroDeProfessor.setBounds(100, 100, 340, 220);
+		frmCadastroDeProfessor.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmCadastroDeProfessor.getContentPane().setLayout(null);
 		
 		nomeTxt = new JTextField();
-		nomeTxt.setBounds(10, 26, 424, 20);
+		nomeTxt.setBounds(10, 22, 315, 20);
 		frmCadastroDeProfessor.getContentPane().add(nomeTxt);
 		nomeTxt.setColumns(10);
 		
-		JLabel lblNome = new JLabel("Nome: ");
-		lblNome.setBounds(10, 8, 46, 14);
+		JLabel lblNome = new JLabel("Nome:");
+		lblNome.setBounds(10, 4, 46, 14);
 		frmCadastroDeProfessor.getContentPane().add(lblNome);
 		
 		JLabel lblDataDeNascimento = new JLabel("Data de nascimento: ");
-		lblDataDeNascimento.setBounds(10, 56, 159, 14);
+		lblDataDeNascimento.setBounds(10, 49, 185, 14);
 		frmCadastroDeProfessor.getContentPane().add(lblDataDeNascimento);
 		
-		dataNascTxt = new JTextField();
-		dataNascTxt.setBounds(9, 72, 124, 20);
-		frmCadastroDeProfessor.getContentPane().add(dataNascTxt);
-		dataNascTxt.setColumns(10);
+		
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(TelaCadastroProfessor.class.getResource("/imagens/user_icon.png")));
+		lblNewLabel.setBounds(230, 55, 76, 76);
+		frmCadastroDeProfessor.getContentPane().add(lblNewLabel);
 		
 		JLabel lblSalrio = new JLabel("Sal\u00E1rio: ");
-		lblSalrio.setBounds(13, 98, 46, 14);
+		lblSalrio.setBounds(11, 97, 46, 14);
 		frmCadastroDeProfessor.getContentPane().add(lblSalrio);
 		
 		salarioTxt = new JTextField();
-		salarioTxt.setBounds(10, 118, 97, 20);
+		salarioTxt.setBounds(11, 114, 100, 20);
 		frmCadastroDeProfessor.getContentPane().add(salarioTxt);
 		salarioTxt.setColumns(10);
+		
+		DateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+		JFormattedTextField dataTxt = new JFormattedTextField(format);
+		dataTxt.setColumns(10);
+		dataTxt.setBounds(12, 69, 97, 20);
+		
+		try {
+			MaskFormatter dateMask = new MaskFormatter("##/##/####");
+	        dateMask.install(dataTxt);
+	    } catch (ParseException ex) {
+	    	JOptionPane.showMessageDialog(null, "Data Inválida");
+	      }
+		frmCadastroDeProfessor.getContentPane().add(dataTxt);
+		
+		
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				//System.out.println(dataTxt.getText());
 				Professor prof = new Professor();
 				ProfessorDAO dao = new ProfessorDAO();
 				
 				prof.setNome(nomeTxt.getText());
-				prof.setDataNasc(dataNascTxt.getText());
+				prof.setDataNasc(dataTxt.getText());
 				prof.setSalario(Double.parseDouble(salarioTxt.getText()));
-				
 				dao.create(prof);
 				
-				
+				//JOptionPane.showMessageDialog(null, "teste");
 			}
 		});
-		btnCadastrar.setBounds(10, 173, 424, 33);
+		
+		btnCadastrar.setBounds(10, 144, 315, 36);
 		frmCadastroDeProfessor.getContentPane().add(btnCadastrar);
+		
 	}
-
 }

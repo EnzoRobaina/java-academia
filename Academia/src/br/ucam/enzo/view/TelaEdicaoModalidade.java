@@ -32,17 +32,28 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.DefaultComboBoxModel;
 
-public class TelaCadastroModalidade {
+public class TelaEdicaoModalidade {
 
-	private JFrame frmCadastroDeModalidade;
+	private JFrame frmEdicaoDeModalidade;
+	private JTextField valorTxt;
+	private Modalidade modalidade;
 	
-	public JFrame getFrmCadastroDeModalidade() {
-		return frmCadastroDeModalidade;
+	public JFrame getFrmEdicaoDeModalidade() {
+		return frmEdicaoDeModalidade;
 	}
 
 	private JTextField nomeTxt;
 	private JTextField dataNascTxt;
-	private JTextField valorTxt;
+	
+	public Modalidade getModalidade() {
+		return modalidade;
+	}
+
+	public void setModalidade(Modalidade modalidade) {
+		this.modalidade = modalidade;
+	}
+
+	
 
 	/**
 	 * Launch the application.
@@ -51,8 +62,8 @@ public class TelaCadastroModalidade {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaCadastroModalidade window = new TelaCadastroModalidade();
-					window.frmCadastroDeModalidade.setVisible(true);
+					TelaEdicaoModalidade window = new TelaEdicaoModalidade();
+					window.frmEdicaoDeModalidade.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -63,7 +74,12 @@ public class TelaCadastroModalidade {
 	/**
 	 * Create the application.
 	 */
-	public TelaCadastroModalidade() {
+	public TelaEdicaoModalidade() {
+		initialize();
+	}
+	
+	public TelaEdicaoModalidade(Modalidade modalidade) {
+		this.modalidade = modalidade;
 		initialize();
 	}
 
@@ -71,30 +87,30 @@ public class TelaCadastroModalidade {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmCadastroDeModalidade = new JFrame();
-		frmCadastroDeModalidade.setTitle("Cadastro de modalidade");
-		frmCadastroDeModalidade.setResizable(false);
-		frmCadastroDeModalidade.setBounds(100, 100, 340, 265);
-		frmCadastroDeModalidade.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frmCadastroDeModalidade.getContentPane().setLayout(null);
+		frmEdicaoDeModalidade = new JFrame();
+		frmEdicaoDeModalidade.setTitle("Edicao de modalidade");
+		frmEdicaoDeModalidade.setResizable(false);
+		frmEdicaoDeModalidade.setBounds(100, 100, 340, 265);
+		frmEdicaoDeModalidade.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frmEdicaoDeModalidade.getContentPane().setLayout(null);
 		
 		nomeTxt = new JTextField();
 		nomeTxt.setBounds(10, 22, 315, 20);
-		frmCadastroDeModalidade.getContentPane().add(nomeTxt);
+		frmEdicaoDeModalidade.getContentPane().add(nomeTxt);
 		nomeTxt.setColumns(10);
 		
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setBounds(10, 4, 46, 14);
-		frmCadastroDeModalidade.getContentPane().add(lblNome);
+		frmEdicaoDeModalidade.getContentPane().add(lblNome);
 		
 		JLabel lblProfessor = new JLabel("Professor:");
 		lblProfessor.setBounds(10, 142, 126, 14);
-		frmCadastroDeModalidade.getContentPane().add(lblProfessor);
+		frmEdicaoDeModalidade.getContentPane().add(lblProfessor);
 		
 		JComboBox professorComboBox = new JComboBox();
 		professorComboBox.setToolTipText("Escolha\r\n");
 		professorComboBox.setBounds(10, 159, 126, 20);
-		frmCadastroDeModalidade.getContentPane().add(professorComboBox);
+		frmEdicaoDeModalidade.getContentPane().add(professorComboBox);
 		
 		//PREENCHENDO COMBOBOX
 		ProfessorDAO pDao = new ProfessorDAO();
@@ -105,46 +121,50 @@ public class TelaCadastroModalidade {
 		}
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(TelaCadastroModalidade.class.getResource("/imagens/sport_icon.png")));
+		lblNewLabel.setIcon(new ImageIcon(TelaEdicaoModalidade.class.getResource("/imagens/sport_icon.png")));
 		lblNewLabel.setBounds(230, 55, 76, 76);
-		frmCadastroDeModalidade.getContentPane().add(lblNewLabel);
+		frmEdicaoDeModalidade.getContentPane().add(lblNewLabel);
 		
 		JComboBox horarioComboBox = new JComboBox();
 		horarioComboBox.setModel(new DefaultComboBoxModel(new String[] {"Manh\u00E3", "Tarde", "Noite"}));
 		horarioComboBox.setBounds(10, 117, 126, 20);
-		frmCadastroDeModalidade.getContentPane().add(horarioComboBox);
+		frmEdicaoDeModalidade.getContentPane().add(horarioComboBox);
 		
 		JLabel lblHorrio = new JLabel("Hor\u00E1rio:");
 		lblHorrio.setBounds(10, 100, 46, 14);
-		frmCadastroDeModalidade.getContentPane().add(lblHorrio);
+		frmEdicaoDeModalidade.getContentPane().add(lblHorrio);
 		
 		valorTxt = new JTextField();
 		valorTxt.setBounds(10, 72, 86, 20);
-		frmCadastroDeModalidade.getContentPane().add(valorTxt);
+		frmEdicaoDeModalidade.getContentPane().add(valorTxt);
 		valorTxt.setColumns(10);
 		
 		JLabel lblValor = new JLabel("Valor:");
 		lblValor.setBounds(10, 53, 46, 14);
-		frmCadastroDeModalidade.getContentPane().add(lblValor);
+		frmEdicaoDeModalidade.getContentPane().add(lblValor);
 		
-		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.addActionListener(new ActionListener() {
+		nomeTxt.setText(modalidade.getNome());
+		valorTxt.setText(String.valueOf(modalidade.getValor()));
+		
+		JButton btnSalvar = new JButton("Salvar");
+		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				Modalidade modalidade = new Modalidade();
+				
 				ModalidadeDAO dao = new ModalidadeDAO();
 				
+				modalidade.setId(modalidade.getId());
 				modalidade.setNome(nomeTxt.getText());
 				modalidade.setValor(Double.parseDouble(valorTxt.getText()));
 				modalidade.setHorario(horarioComboBox.getSelectedItem().toString());
 				modalidade.setProfessor(professorComboBox.getSelectedItem().toString());
-				dao.create(modalidade);
+				dao.update(modalidade);
 				
 				//JOptionPane.showMessageDialog(null, "teste");
 			}
 		});
-		btnCadastrar.setBounds(10, 190, 315, 36);
-		frmCadastroDeModalidade.getContentPane().add(btnCadastrar);
+		btnSalvar.setBounds(10, 190, 315, 36);
+		frmEdicaoDeModalidade.getContentPane().add(btnSalvar);
 		
 	}
 }

@@ -9,7 +9,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import br.ucam.enzo.model.DAO.AlunoDAO;
+import br.ucam.enzo.model.DAO.ModalidadeDAO;
 import br.ucam.enzo.model.bean.Aluno;
+import br.ucam.enzo.model.bean.Modalidade;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
@@ -18,14 +20,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
-public class TelaConsultaAluno {
+public class TelaConsultaModalidade {
 
-	private JFrame frmConsultaAlunos;
+	private JFrame frmConsultaModalidades;
 	private JTable table;
 	private JTextField nomeTxt;
 
-	public JFrame getFrmConsultaAlunos() {
-		return frmConsultaAlunos;
+	public JFrame getFrmConsultaModalidades() {
+		return frmConsultaModalidades;
 	}
 
 	/**
@@ -35,8 +37,8 @@ public class TelaConsultaAluno {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaConsultaAluno window = new TelaConsultaAluno();
-					window.frmConsultaAlunos.setVisible(true);
+					TelaConsultaModalidade window = new TelaConsultaModalidade();
+					window.frmConsultaModalidades.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -47,7 +49,7 @@ public class TelaConsultaAluno {
 	/**
 	 * Create the application.
 	 */
-	public TelaConsultaAluno() {
+	public TelaConsultaModalidade() {
 		initialize();
 	}
 
@@ -55,16 +57,16 @@ public class TelaConsultaAluno {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmConsultaAlunos = new JFrame();
-		frmConsultaAlunos.setResizable(false);
-		frmConsultaAlunos.setTitle("Consulta Alunos");
-		frmConsultaAlunos.setBounds(100, 100, 455, 405);
-		frmConsultaAlunos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frmConsultaAlunos.getContentPane().setLayout(null);
+		frmConsultaModalidades = new JFrame();
+		frmConsultaModalidades.setResizable(false);
+		frmConsultaModalidades.setTitle("Consulta Modalidades");
+		frmConsultaModalidades.setBounds(100, 100, 455, 405);
+		frmConsultaModalidades.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frmConsultaModalidades.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 92, 429, 274);
-		frmConsultaAlunos.getContentPane().add(scrollPane);
+		frmConsultaModalidades.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		
@@ -73,7 +75,7 @@ public class TelaConsultaAluno {
 				new Object[][] {
 				},
 				new String[] {
-					"ID", "Nome", "Data nasc.", "Modalidade"
+					"ID", "Nome", "Horário", "Valor", "Professor"
 				}
 			) {
 				boolean[] columnEditables = new boolean[] {
@@ -93,13 +95,14 @@ public class TelaConsultaAluno {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				defaultModel.setNumRows(0);
-				AlunoDAO dao = new AlunoDAO();
-				for(Aluno a: dao.listar()) {
+				ModalidadeDAO dao = new ModalidadeDAO();
+				for(Modalidade m: dao.listar()) {
 					defaultModel.addRow(new Object [] {
-							a.getId(),
-							a.getNome(),
-							a.getDataNasc(),
-							a.getModalidade()
+							m.getId(),
+							m.getNome(),
+							m.getHorario(),
+							m.getValor(),
+							m.getProfessor()
 					});
 				}
 				table.setModel(defaultModel);
@@ -108,11 +111,11 @@ public class TelaConsultaAluno {
 			}
 		});
 		btnListar.setBounds(10, 11, 108, 23);
-		frmConsultaAlunos.getContentPane().add(btnListar);
+		frmConsultaModalidades.getContentPane().add(btnListar);
 		
 		nomeTxt = new JTextField();
 		nomeTxt.setBounds(82, 59, 185, 20);
-		frmConsultaAlunos.getContentPane().add(nomeTxt);
+		frmConsultaModalidades.getContentPane().add(nomeTxt);
 		nomeTxt.setColumns(10);
 		
 		JButton btnBuscaPorNome = new JButton("Buscar");
@@ -120,13 +123,14 @@ public class TelaConsultaAluno {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				defaultModel.setNumRows(0);
-				AlunoDAO dao = new AlunoDAO();
-				for(Aluno a: dao.buscaNome(nomeTxt.getText())) {
+				ModalidadeDAO dao = new ModalidadeDAO();
+				for(Modalidade m: dao.buscaNome(nomeTxt.getText())) {
 					defaultModel.addRow(new Object [] {
-							a.getId(),
-							a.getNome(),
-							a.getDataNasc(),
-							a.getModalidade()
+							m.getId(),
+							m.getNome(),
+							m.getHorario(),
+							m.getValor(),
+							m.getProfessor()
 					});
 				}
 				table.setModel(defaultModel);
@@ -134,7 +138,7 @@ public class TelaConsultaAluno {
 			}
 		});
 		btnBuscaPorNome.setBounds(277, 58, 116, 23);
-		frmConsultaAlunos.getContentPane().add(btnBuscaPorNome);
+		frmConsultaModalidades.getContentPane().add(btnBuscaPorNome);
 		
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.addActionListener(new ActionListener() {
@@ -143,42 +147,32 @@ public class TelaConsultaAluno {
 					JOptionPane.showMessageDialog(null, "Nenhum item selecionado");
 				}
 				else {
-					//table.removeRowSelectionInterval(table.getSelectedRow(), table.getSelectedRow());
 					System.out.println(table.getValueAt(table.getSelectedRow(), 0));
-					/*System.out.println((int)table.getValueAt(table.getSelectedRow(), 0));
-					System.out.println(table.getValueAt(table.getSelectedRow(), 1).toString());
-					System.out.println(table.getValueAt(table.getSelectedRow(), 2).toString());
-					System.out.println(table.getValueAt(table.getSelectedRow(), 3).toString()); */
-					AlunoDAO dao = new AlunoDAO();
+					ModalidadeDAO dao = new ModalidadeDAO();
 					
-					Aluno a = new Aluno();
-					a.setId((int)table.getValueAt(table.getSelectedRow(), 0));
-					a.setNome(table.getValueAt(table.getSelectedRow(), 1).toString());
-					a.setDataNasc(table.getValueAt(table.getSelectedRow(), 2).toString());
-					a.setModalidade(table.getValueAt(table.getSelectedRow(), 3).toString());
+					Modalidade m = new Modalidade();
+					m.setId((int)table.getValueAt(table.getSelectedRow(), 0));
+					m.setNome(table.getValueAt(table.getSelectedRow(), 1).toString());
+					m.setHorario(table.getValueAt(table.getSelectedRow(), 2).toString());
+					String valor = table.getValueAt(table.getSelectedRow(), 3).toString();
+					m.setValor(Double.parseDouble(valor));
+					m.setProfessor(table.getValueAt(table.getSelectedRow(), 4).toString());
 					
-					System.out.println(a.getId());
-					System.out.println(a.getNome());
-					System.out.println(a.getDataNasc());
-					System.out.println(a.getModalidade());
-					
-					TelaEdicaoAluno editaAluno = new TelaEdicaoAluno(a);
-					
-					/*System.out.println("get from telaconsultaaluno");
-					System.out.println(editaAluno.getAluno().getNome());*/
-					editaAluno.getFrmTelaEdicaoAluno().setVisible(true);
+					TelaEdicaoModalidade editaModalidade = new TelaEdicaoModalidade(m);
+		
+					editaModalidade.getFrmEdicaoDeModalidade().setVisible(true);
 					
 					//dao.update(a);
 				}
 			}
 		});
 		btnEditar.setBounds(168, 11, 108, 23);
-		frmConsultaAlunos.getContentPane().add(btnEditar);
+		frmConsultaModalidades.getContentPane().add(btnEditar);
 		
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				AlunoDAO dao = new AlunoDAO();
+				ModalidadeDAO dao = new ModalidadeDAO();
 				
 				if(table.getSelectedRow()==-1) {
 					JOptionPane.showMessageDialog(null, "Nenhum item selecionado");
@@ -192,10 +186,10 @@ public class TelaConsultaAluno {
 			}
 		});
 		btnExcluir.setBounds(331, 11, 108, 23);
-		frmConsultaAlunos.getContentPane().add(btnExcluir);
+		frmConsultaModalidades.getContentPane().add(btnExcluir);
 		
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setBounds(39, 62, 40, 14);
-		frmConsultaAlunos.getContentPane().add(lblNome);
+		frmConsultaModalidades.getContentPane().add(lblNome);
 	}
 }

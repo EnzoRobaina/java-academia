@@ -4,23 +4,30 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
-import br.ucam.connection.ConnectionFactory;
+import br.ucam.enzo.connection.ConnectionFactory;
 import br.ucam.enzo.model.DAO.AlunoDAO;
+import br.ucam.enzo.model.DAO.ModalidadeDAO;
 import br.ucam.enzo.model.bean.Aluno;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class TelaCadastroAluno {
 
@@ -62,12 +69,12 @@ public class TelaCadastroAluno {
 		frmCadastroDeAluno = new JFrame();
 		frmCadastroDeAluno.setTitle("Cadastro de aluno");
 		frmCadastroDeAluno.setResizable(false);
-		frmCadastroDeAluno.setBounds(100, 100, 450, 220);
-		frmCadastroDeAluno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmCadastroDeAluno.setBounds(100, 100, 340, 220);
+		frmCadastroDeAluno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmCadastroDeAluno.getContentPane().setLayout(null);
 		
 		nomeTxt = new JTextField();
-		nomeTxt.setBounds(10, 22, 424, 20);
+		nomeTxt.setBounds(10, 22, 315, 20);
 		frmCadastroDeAluno.getContentPane().add(nomeTxt);
 		nomeTxt.setColumns(10);
 		
@@ -79,10 +86,20 @@ public class TelaCadastroAluno {
 		lblDataDeNascimento.setBounds(10, 49, 185, 14);
 		frmCadastroDeAluno.getContentPane().add(lblDataDeNascimento);
 		
-		dataNascTxt = new JTextField();
+		//FORMATO DE DATA
+		
+		DateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+		JFormattedTextField dataNascTxt = new JFormattedTextField(format);
 		dataNascTxt.setBounds(10, 69, 126, 20);
 		frmCadastroDeAluno.getContentPane().add(dataNascTxt);
 		dataNascTxt.setColumns(10);
+		
+		try {
+			MaskFormatter dateMask = new MaskFormatter("##/##/####");
+	        dateMask.install(dataNascTxt);
+	    } catch (ParseException ex) {
+	    	JOptionPane.showMessageDialog(null, "Data Inválida");
+	      }
 		
 		JLabel lblModalidade = new JLabel("Modalidade:");
 		lblModalidade.setBounds(10, 100, 126, 14);
@@ -93,27 +110,12 @@ public class TelaCadastroAluno {
 		comboBox.setBounds(11, 116, 126, 20);
 		frmCadastroDeAluno.getContentPane().add(comboBox);
 		
-		try {
-			PreparedStatement stmt = null;
-			Connection con = null;
-			ResultSet rs = null;
-			List<Aluno> alunos = new ArrayList<>();
-			
-			ConnectionFactory.conectar();
-			stmt = ConnectionFactory.con.prepareStatement("select nome from modalidade");
-			rs = stmt.executeQuery();
-				
-			while(rs.next()) {
-					
-				comboBox.addItem(rs.getString("nome"));
-					
-				}
-					
-				
-		} catch(SQLException e) {
-			System.out.println(e);
-		} finally {
-			ConnectionFactory.desconectar();
+		//PREENCHENDO COMBOBOX
+		ModalidadeDAO mDao = new ModalidadeDAO();
+		ArrayList modalidades = mDao.fillComboModalidades();
+		
+		for(int i = 0; i<modalidades.size();i++) {
+			comboBox.addItem(modalidades.get(i));
 		}
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
@@ -131,7 +133,12 @@ public class TelaCadastroAluno {
 				//JOptionPane.showMessageDialog(null, "teste");
 			}
 		});
-		btnCadastrar.setBounds(10, 144, 424, 36);
+		btnCadastrar.setBounds(10, 144, 315, 36);
 		frmCadastroDeAluno.getContentPane().add(btnCadastrar);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(TelaCadastroAluno.class.getResource("/imagens/user_icon.png")));
+		lblNewLabel.setBounds(230, 55, 76, 76);
+		frmCadastroDeAluno.getContentPane().add(lblNewLabel);
 	}
 }

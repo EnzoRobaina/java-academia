@@ -19,8 +19,6 @@ public class TelaMenuPrincipal {
 		return frmTelaMenuPrincipal;
 	}
 
-	
-
 	/**
 	 * Launch the application.
 	 */
@@ -81,6 +79,12 @@ public class TelaMenuPrincipal {
 		mnArquivo.add(cadastrarProfessor);
 		
 		JMenuItem cadastrarModalidade = new JMenuItem("Cadastrar Modalidade");
+		cadastrarModalidade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaCadastroModalidade cadastroModalidade = new TelaCadastroModalidade();
+				cadastroModalidade.getFrmCadastroDeModalidade().setVisible(true);
+			}
+		});
 		mnArquivo.add(cadastrarModalidade);
 		
 		JMenuItem sair = new JMenuItem("Sair");
@@ -105,10 +109,40 @@ public class TelaMenuPrincipal {
 		mnConsultar.add(mntmAlunos);
 		
 		JMenuItem mntmProfessores = new JMenuItem("Professores");
+		mntmProfessores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaConsultaProfessor consultaProfessor = new TelaConsultaProfessor();
+				consultaProfessor.getFrmConsultaProfessores().setVisible(true);
+			}
+		});
 		mnConsultar.add(mntmProfessores);
 		
 		JMenuItem mntmModalidades = new JMenuItem("Modalidades");
+		mntmModalidades.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaConsultaModalidade consultaModalidade = new TelaConsultaModalidade();
+				consultaModalidade.getFrmConsultaModalidades().setVisible(true);
+			}
+		});
 		mnConsultar.add(mntmModalidades);
+		
+		JMenu mnAjuda = new JMenu("Ajuda");
+		menuBar.add(mnAjuda);
+		
+		JMenuItem mntmSobre = new JMenuItem("Sobre");
+		mntmSobre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				TelaSobre sobre = new TelaSobre();
+				sobre.getFrmSobre().setVisible(true);
+			}
+		});
+		mnAjuda.add(mntmSobre);
 		frmTelaMenuPrincipal.getContentPane().setLayout(null);
+		
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(TelaMenuPrincipal.class.getResource("/imagens/sport_icon_set2.png")));
+		label.setBounds(0, 11, 430, 230);
+		frmTelaMenuPrincipal.getContentPane().add(label);
 	}
 }
