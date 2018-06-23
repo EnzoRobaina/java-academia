@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+import br.ucam.connection.ConnectionFactory;
 import br.ucam.enzo.model.DAO.AlunoDAO;
 import br.ucam.enzo.model.bean.Aluno;
 
@@ -13,6 +14,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class TelaCadastroAluno {
@@ -82,8 +89,32 @@ public class TelaCadastroAluno {
 		frmCadastroDeAluno.getContentPane().add(lblModalidade);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(10, 113, 33, 20);
+		comboBox.setToolTipText("Escolha\r\n");
+		comboBox.setBounds(11, 116, 126, 20);
 		frmCadastroDeAluno.getContentPane().add(comboBox);
+		
+		try {
+			PreparedStatement stmt = null;
+			Connection con = null;
+			ResultSet rs = null;
+			List<Aluno> alunos = new ArrayList<>();
+			
+			ConnectionFactory.conectar();
+			stmt = ConnectionFactory.con.prepareStatement("select nome from modalidade");
+			rs = stmt.executeQuery();
+				
+			while(rs.next()) {
+					
+				comboBox.addItem(rs.getString("nome"));
+					
+				}
+					
+				
+		} catch(SQLException e) {
+			System.out.println(e);
+		} finally {
+			ConnectionFactory.desconectar();
+		}
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
@@ -94,8 +125,9 @@ public class TelaCadastroAluno {
 				
 				a.setNome(nomeTxt.getText());
 				a.setDataNasc(dataNascTxt.getText());
-				
+				a.setModalidade(comboBox.getSelectedItem().toString());
 				dao.create(a);
+				
 				//JOptionPane.showMessageDialog(null, "teste");
 			}
 		});

@@ -12,7 +12,7 @@ public class ConnectionFactory {
 	//private static final String url = "jdbc:postgresql://localhost:5433/academia";
 	
 	private static final String driver = "org.postgresql.Driver";
-	private static final String url = "jdbc:postgresql://localhost:5433/academia";
+	private static final String url = "jdbc:postgresql://localhost:5432/academia";
 	private static final String user = "postgres";
 	private static final String password = "root";
 	public static Connection con;
@@ -37,7 +37,8 @@ public class ConnectionFactory {
 	public static void desconectar() {
 		try {
 			con.close();
-			JOptionPane.showMessageDialog(null, "Desconectado!");
+			//JOptionPane.showMessageDialog(null, "Desconectado!");
+			System.out.println("Desconectado!");
 		}catch(SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Falha: "+ex);
 		}

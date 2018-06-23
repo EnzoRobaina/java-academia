@@ -4,9 +4,13 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
+import br.ucam.enzo.model.DAO.LoginDAO;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 import java.awt.event.ActionEvent;
 
 public class TelaLogin {
@@ -70,9 +74,13 @@ public class TelaLogin {
 		JButton btnNewButton = new JButton("Logar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TelaMenuPrincipal principal = new TelaMenuPrincipal();
-				frmLogin.dispose();
-				principal.getFrmTelaMenuPrincipal().setVisible(true);
+				LoginDAO dao = new LoginDAO();
+				if(dao.validar(userTxt.getText(), passwordTxt.getText())) {
+					TelaMenuPrincipal principal = new TelaMenuPrincipal();
+					frmLogin.dispose();
+					principal.getFrmTelaMenuPrincipal().setVisible(true);
+				}
+				
 			}
 		});
 		btnNewButton.setBounds(10, 109, 175, 23);

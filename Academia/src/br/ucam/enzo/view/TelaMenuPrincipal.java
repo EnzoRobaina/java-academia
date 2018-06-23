@@ -99,7 +99,7 @@ public class TelaMenuPrincipal {
 			public void actionPerformed(ActionEvent e) {
 				
 				TelaConsultaAluno consultaAluno = new TelaConsultaAluno();
-				
+				consultaAluno.getFrmConsultaAlunos().setVisible(true);
 			}
 		});
 		mnConsultar.add(mntmAlunos);
